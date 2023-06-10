@@ -1,4 +1,5 @@
 import socket
+from server_action import action
 
 def main():
     # Server IP and port
@@ -6,7 +7,8 @@ def main():
     server_port = 8080
 
     # Create a TCP server socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    global server_socket 
+    server_socket  = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
         # Bind the socket to the server address
@@ -31,10 +33,15 @@ def main():
                     break
 
                 # Process the data or perform any required operations
-
+                
                 # Send a response to the client
                 response = "Message received: " + data
                 client_socket.sendall(response.encode())
+
+            
+            # sends data to server_action for further actions
+            # action(data)#
+
 
             # Close the client socket
             client_socket.close()
@@ -46,5 +53,6 @@ def main():
         # Close the server socket
         server_socket.close()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
+main()

@@ -4,7 +4,9 @@ import tkinter as tk
 def estConnection():
     Connect()
 
-def new(username, passwd):
+
+def account(username, passwd, option):
+    communicate(str(option))
     communicate(str(username))
     communicate(str(passwd))
 
