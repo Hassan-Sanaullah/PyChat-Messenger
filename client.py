@@ -32,8 +32,9 @@ def socketCall(message, loop):
     except Exception as e:
         print("An error occurred:", str(e))
     finally:
-        # Close the socket
-        client_socket.close()
+        if loop == False:
+            # Close the socket
+            client_socket.close()
 
 # if __name__ == '__main__':
 #     main()
