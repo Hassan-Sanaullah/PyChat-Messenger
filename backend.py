@@ -6,9 +6,11 @@ def estConnection():
 
 
 def account(username, passwd, option):
-    communicate(str(option))
-    communicate(str(username))
-    communicate(str(passwd))
+
+    message = "-".join([str(option), str(username), str(passwd)])
+    communicate(str(message))
+    # communicate(str(username))
+    # communicate(str(passwd))
 
 def estDisconnect():
     Disconnect()

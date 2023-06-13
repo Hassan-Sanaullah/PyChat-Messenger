@@ -1,5 +1,5 @@
 import socket
-from server_action import action
+# from server_action import action
 
 def main():
     # Server IP and port

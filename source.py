@@ -34,18 +34,17 @@ for row in range(row_num):
 for col in range(col_num):
     fr.columnconfigure(col, weight=1)
 
-def save(user, password, option):
-    username = user.get()
-    passwd = password.get()
-
-    account(username, passwd, option)
-
 # All GUI Icons and Images
 login_btn_photo = tk.PhotoImage(file=r'C:\Users\DELL\Documents\Lab_work\python\log_in_button.png')
 signup_btn_photo = tk.PhotoImage(file=r'C:\Users\DELL\Documents\Lab_work\python\sign_up_button.png')
 back_btn_photo = tk.PhotoImage(file=r"C:\Users\DELL\Documents\Lab_work\python\eback_button.png")
 logo = tk.PhotoImage(file=r"C:\Users\DELL\Documents\Lab_work\python\logo.PNG")
 
+def save(user, password, option):
+    username = user.get()
+    passwd = password.get()
+
+    account(username, passwd, option)
 
 def clear_frame():
     # Destroy all widgets inside the frame
