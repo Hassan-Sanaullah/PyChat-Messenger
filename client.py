@@ -24,7 +24,8 @@ def communicate(message):
 
     # Send data to the server
     #message = input("Enter a message to send: ")
-    client_socket.sendall(message.encode())
+    if message is not None:
+        client_socket.sendall(message.encode())
 
     # Receive data from the server
     data = client_socket.recv(1024).decode()

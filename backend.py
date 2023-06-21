@@ -11,6 +11,17 @@ def account(username, passwd, option):
     
     return communicate(str(message))
 
+def get_inbox(option, username):
+    message = "-".join([option, username])
+
+    return communicate(str(message))
+
+
+def get_message(option, username, selected_message):
+
+    message = "-".join([str(option), str(username), str(selected_message)])
+    
+    return communicate(str(message))
 
 def estDisconnect():
     Disconnect()
