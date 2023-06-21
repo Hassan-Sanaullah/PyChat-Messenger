@@ -8,9 +8,9 @@ def estConnection():
 def account(username, passwd, option):
 
     message = "-".join([str(option), str(username), str(passwd)])
-    communicate(str(message))
-    # communicate(str(username))
-    # communicate(str(passwd))
+    
+    return communicate(str(message))
+
 
 def estDisconnect():
     Disconnect()

@@ -30,6 +30,7 @@ def communicate(message):
     data = client_socket.recv(1024).decode()
     print("Received from server:", data)
 
+    return data
                     
     # if message == "exit":
     #     break

@@ -1,5 +1,5 @@
 import socket
-# from server_action import action
+from server_action import main_action
 
 def main():
     # Server IP and port
@@ -7,8 +7,7 @@ def main():
     server_port = 8080
 
     # Create a TCP server socket
-    global server_socket 
-    server_socket  = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
         # Bind the socket to the server address
@@ -31,17 +30,15 @@ def main():
                 if not data:
                     # No more data, break the loop
                     break
+                
+                # Pass data to the action function in server_action.py
+                response = main_action(data)
 
                 # Process the data or perform any required operations
-                
                 # Send a response to the client
-                response = "Message received: " + data
                 client_socket.sendall(response.encode())
 
-            
-            # sends data to server_action for further actions
-            # action(data)#
-
+                
 
             # Close the client socket
             client_socket.close()
@@ -51,8 +48,7 @@ def main():
         print("An error occurred:", str(e))
     finally:
         # Close the server socket
+        wait = input("Enter anything to continue")
         server_socket.close()
 
-# if __name__ == '__main__':
-#     main()
 main()
