@@ -62,11 +62,13 @@ def new_message(data):
     messages = open(base_dir + 'messages.csv', 'a')
     csvwrite = csv.writer(messages)
 
-    text = [data[1], data[2], data[3]]
+    text = [data[2], data[1], data[3]]
     csvwrite.writerow(text)
 
     messages.close()
     print('New message received and saved')
+
+    return 'null'
 
 def inbox(data):
     inboxlist = []
@@ -80,6 +82,8 @@ def inbox(data):
             continue
         elif row[0] == data[1]:
             inboxlist.append(row[1])
+        elif data[1] == row[1]:
+            inboxlist.append(row[0])
     
     messages.close()
 
@@ -102,9 +106,11 @@ def get_message(data):
 
         if len(row) == 0:
             continue
-        if ((row[0] == data[1]) and (row[1] == data[2])):
+        if ((row[0] == data[1]) and (row[1] == data[2]) or (row[0] == data[2]) and (row[1] == data[1])):
             print("getting message")
+            line.append(row[1])
             line.append(row[2])
+            line.append('  ')
 
     messages.close()
 
@@ -125,12 +131,16 @@ def main_action(data):
             return str(create_account(data))
     elif data[0] == 'login':
         return str(check_account(data))
-    elif data[0] == 'newMessage':
+    elif data[0] == 'newMessage':  ######
         new_message(data)
+        return 'null'
     elif data[0] == 'inbox':
         return str(inbox(data))
     elif data[0] == 'getMessages':
         return get_message(data)
+    elif data[0] == 'sendMessage':
+        new_message(data)
+        return 'null'
         
 
 
@@ -141,5 +151,6 @@ def main_action(data):
 #main_action('login-hassan-zxc')
 #main_action('signup-hassan-zxc')
 #main_action('newMessage-hassan-ali-hey')
-#main_action('inbox-hassa')
-#main_action('getMessages-hassan-ahmed')
+#main_action('inbox-z')
+#main_action('getMessages-z-z')
+#sendMessage-hassan-ahmed-hello hi

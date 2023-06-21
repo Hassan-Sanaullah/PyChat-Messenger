@@ -23,5 +23,12 @@ def get_message(option, username, selected_message):
     
     return communicate(str(message))
 
+def send_message(username, receiver, message, option):
+    data = "-".join([option, username, receiver, message])
+
+    return communicate(data)
+
+
 def estDisconnect():
     Disconnect()
+

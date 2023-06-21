@@ -2,7 +2,7 @@ import socket
 
 #Creates socket and establishes connection
 def Connect():
-    server_ip = "127.0.0.1"
+    server_ip = "192.168.1.7"
     server_port = 8080
 
     # Create a TCP client socket
@@ -24,8 +24,7 @@ def communicate(message):
 
     # Send data to the server
     #message = input("Enter a message to send: ")
-    if message is not None:
-        client_socket.sendall(message.encode())
+    client_socket.sendall(message.encode())
 
     # Receive data from the server
     data = client_socket.recv(1024).decode()

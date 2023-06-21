@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
 
-from backend import estConnection, account, estDisconnect, get_inbox, get_message
+from backend import estConnection, account, estDisconnect, get_inbox, get_message, send_message
 
 #Main window
 root = tk.Tk()
@@ -42,15 +42,18 @@ back_btn_photo = tk.PhotoImage(file=base_dir+'eback_button.png')
 logo = tk.PhotoImage(file=base_dir+'logo.PNG')
 logout_btn_photo = tk.PhotoImage(file=base_dir+'logout_button.png')
 newmessage_btn_photo = tk.PhotoImage(file=base_dir+'new_message_button.PNG')
+send_btn_photo = tk.PhotoImage(file=base_dir+'send_button.PNG')
+small_back_btn = tk.PhotoImage(file=base_dir+'small_back_button.png')
 
 # gets name when you click name in inbox and sends it to backend file
-def message_backend(message_name, username, option):
+def inbox_backend(message_name, username, option):
     selected_items = message_name.curselection()
     if selected_items:
         index = selected_items[0]
         selected_message = message_name.get(index)
 
     response = get_message(str(option), str(username), str(selected_message))
+    chatting_screen(username, response, selected_message)
     
 
 #gets username and password from entry box and sends it to backend file
@@ -73,26 +76,76 @@ def clear_frame():
     for widget in fr.winfo_children():
         widget.destroy()
 
-def chatting_screen(username):
+def chatting_backend(username, receiver, message_enter, option):
+
+    if option == 'newMessage':
+        receiver = receiver.get()
+
+    message = message_enter.get()
+
+    response = send_message(username, receiver, message, option)
+    response2 = get_message('getMessages', username, receiver)
+
+    chatting_screen(username, response2, receiver)
+
+def chatting_screen(username, text, receiver):
 
     # selected_indices = message_name.curselection()
     # selected_message = message_name.get()
+    messages = text.split('-')
 
     clear_frame()
     print('opened message')
     
-    messages = []
     var = tk.Variable(value = messages)
-    messages_box = tk.Listbox(fr, listvariable=var, height=6, selectmode=tk.SINGLE, 
+    messages_box = tk.Listbox(fr, listvariable=var, height=12, selectmode=tk.SINGLE, 
     background="#272B37",  foreground="White", font="Roboto")
     messages_box.grid(row=1, column=0, columnspan=6, rowspan=3, sticky=tk.NSEW)
 
     message_enter = tk.Entry(fr, background="#525461", foreground="White" )
-    message_enter.grid(row=4, column=3, columnspan=2, ipadx=12, sticky=tk.E)
-    recepient.focus()
+    message_enter.grid(row=4, column=1, columnspan=3, ipadx=30)
+    message_enter.focus()
 
-    send_btn = tk.Button(fr, text='Send')
-    send_btn.bind('<Return', lambda event: message_backend(username, message_enter, 'sendMessage'))
+    send_btn = tk.Button(fr, image=send_btn_photo, bg="#272B37")
+    send_btn["border"] = "0"
+    send_btn.bind('<Button>', lambda event: chatting_backend(username, receiver, message_enter, 'sendMessage'))
+    send_btn.grid(row=4, column=4)
+
+    back_btn = tk.Button(fr, image=small_back_btn, bg="#272B37")
+    back_btn["border"] = "0"
+    back_btn.bind("<Button>", lambda event: inbox_screen(username))
+    back_btn.grid(row=4, column=5)
+
+
+def new_conversation(username):
+    clear_frame()
+
+    username_label = ttk.Label(fr, text="Username:   ", font=("Lucida Sans", 15), background="#272B37", foreground="White")
+    username_label.grid(row=1, column=1, columnspan=2, sticky=tk.E)
+
+    passwd_label = ttk.Label(fr, text='Message:  ', font=("Lucida Sans", 15), background="#272B37", foreground="White")
+    passwd_label.grid(row=2, column=1, columnspan=2, sticky=tk.E)
+
+    receiver = tk.Entry(fr, background="#525461", foreground="White" )
+    receiver.grid(row=1, column=2, columnspan=2, ipadx=12, sticky=tk.E)
+    receiver.focus()
+
+    new_mess = tk.Entry(fr, background="#525461", foreground="White")
+    new_mess.grid(row=2, column=3, columnspan=2, ipadx=10, sticky=tk.W)
+
+    # newMess = new_mess.get()
+    # userN = user.get()
+
+    send_btn = tk.Button(fr, image=send_btn_photo, bg="#272B37")
+    send_btn["border"] = "0"
+    send_btn.bind('<Button>', lambda event: chatting_backend(username, receiver, new_mess, 'newMessage'))
+    send_btn.grid(row=3, column=2, columnspan=2, sticky=tk.S)
+
+    back_btn = tk.Button(fr, image=back_btn_photo, bg="#272B37")
+    back_btn["border"] = "0"
+    back_btn.bind("<Button>", lambda event: inbox_screen(username))
+    back_btn.grid(row=4, column=2, columnspan=2)
+
     
 
 
@@ -113,7 +166,7 @@ def inbox_screen(username):
     background="#272B37",  foreground="White", font="Roboto")
     message_name.grid(row=1, column=0, columnspan=6, rowspan=3, sticky=tk.NSEW)
 
-    message_name.bind('<<ListboxSelect>>', lambda event : message_backend(message_name, username, 'getMessages'))
+    message_name.bind('<<ListboxSelect>>', lambda event : inbox_backend(message_name, username, 'getMessages'))
     
     #logout button
     logout_btn = tk.Button(fr, image=logout_btn_photo, bg='#272B37', bd ="1")
@@ -124,7 +177,7 @@ def inbox_screen(username):
     #new message button
     new_message_btn = tk.Button(fr, image=newmessage_btn_photo, bg='#272B37', bd ="1")
     new_message_btn["border"] = "0"
-    new_message_btn.bind('<Button>', lambda event: chatting_screen(username))
+    new_message_btn.bind('<Button>', lambda event: new_conversation(username))
     new_message_btn.grid(row=4, column=4)
 
 def func_login_signup(option):
